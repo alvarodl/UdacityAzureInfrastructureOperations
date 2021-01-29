@@ -256,14 +256,14 @@
     }
 
   # azurerm_network_interface_backend_address_pool_association.udacity_lb_pool_nic[1] will be created
-  + resource "azurerm_network_interface_backend_address_pool_association" "udacity_lb_pool_nic" {  
+  + resource "azurerm_network_interface_backend_address_pool_association" "udacity_lb_pool_nic" {
       + backend_address_pool_id = (known after apply)
       + id                      = (known after apply)
       + ip_configuration_name   = "udacity-1-nic"
       + network_interface_id    = (known after apply)
     }
 
-  # azurerm_network_interface_security_group_association.udacity_nsg_nic[0] will be created        
+  # azurerm_network_interface_security_group_association.udacity_nsg_nic[0] will be created
   + resource "azurerm_network_interface_security_group_association" "udacity_nsg_nic" {
       + id                        = (known after apply)
       + network_interface_id      = (known after apply)
@@ -297,6 +297,24 @@
               + priority                                   = 100
               + protocol                                   = "Tcp"
               + source_address_prefix                      = "*"
+              + source_address_prefixes                    = []
+              + source_application_security_group_ids      = []
+              + source_port_range                          = "*"
+              + source_port_ranges                         = []
+            },
+          + {
+              + access                                     = "Deny"
+              + description                                = ""
+              + destination_address_prefix                 = "VirtualNetwork"
+              + destination_address_prefixes               = []
+              + destination_application_security_group_ids = []
+              + destination_port_range                     = "*"
+              + destination_port_ranges                    = []
+              + direction                                  = "Inbound"
+              + name                                       = "DenyInternetInbound"
+              + priority                                   = 200
+              + protocol                                   = "*"
+              + source_address_prefix                      = "Internet"
               + source_address_prefixes                    = []
               + source_application_security_group_ids      = []
               + source_port_range                          = "*"

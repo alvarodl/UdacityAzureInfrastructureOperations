@@ -102,6 +102,18 @@ resource "azurerm_network_security_group" "udacity_nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "DenyInternetInbound"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
   tags = {
     environment = "udacity"
   }
