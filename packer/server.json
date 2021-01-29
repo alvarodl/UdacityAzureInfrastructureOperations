@@ -1,0 +1,57 @@
+{
+  "variables": {
+    "client_id": "{{env `ARM_CLIENT_ID`}}",
+    "client_secret": "{{env `ARM_CLIENT_SECRET`}}",
+    "tenant_id": "{{env `ARM_TENANT_ID`}}",
+    "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
+  },
+  "builders": [
+    {
+      "type": "azure-arm",
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "tenant_id": "{{user `tenant_id`}}",
+      "subscription_id": "{{user `subscription_id`}}",
+
+      "os_type": "Linux",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "18.04-LTS",
+
+      "managed_image_resource_group_name": "packer-rg",
+      "managed_image_name": "ubuntuImage",
+      "location": "West Europe",
+      "vm_size": "Standard_D2s_v3",
+
+      "azure_tags": {
+        "dept": "Udacity",
+        "task": "Image deployment"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "source": "site.com",
+      "destination": "~/site.com",
+      "type": "file"
+    },
+    {
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "apt-get update",
+        "apt-get -y upgrade",
+        "echo 'Hello World!' > index.html",
+        "apt-get install -y nginx",
+        "mv -f site.com /etc/nginx/sites-available/site.com",
+        "ln -s /etc/nginx/sites-available/site.com /etc/nginx/sites-enabled/site.com",
+        "mkdir -p /var/www/site.com/html/",
+        "mv -f index.html /var/www/site.com/",
+        "rm -f /etc/nginx/sites-available/default",
+        "rm -f /etc/nginx/sites-enabled/default",
+        "systemctl restart nginx"
+      ],
+      "inline_shebang": "/bin/sh -x",
+      "type": "shell"
+    }
+  ]
+}
